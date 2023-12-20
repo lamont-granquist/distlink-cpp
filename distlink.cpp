@@ -290,7 +290,7 @@ void polynomial_valder(int n, const complex<realfp> c[], const complex<realfp>& 
 }
 
 template<typename realfp>
-inline complex<realfp> ratio(int n, const complex<realfp> c[], const complex<realfp>& z, bool forward)
+inline complex<realfp> ratio1(int n, const complex<realfp> c[], const complex<realfp>& z, bool forward)
 {
  complex<realfp> f, fd;
  polynomial_valder(n, c, z, f, fd, forward);
@@ -356,13 +356,13 @@ unsigned long Newton(int n, complex<realfp> c[], complex<realfp> &z, realfp maxe
   z2=z1;z1=z;
   if(inner)
   {
-   dz=ratio(n,c,z,true);
+   dz=ratio1(n,c,z,true);
    z-=cycled?dz*rand_mlt:dz;
   }
   else
   {
    nrm=1/nrm;
-   dz=ratio(n,c,conj(z)*nrm,false); // actually, dw
+   dz=ratio1(n,c,conj(z)*nrm,false); // actually, dw
    z/=(1-z*(cycled?dz*rand_mlt:dz));
   }
   err2=norm(dz);
@@ -379,13 +379,13 @@ unsigned long Newton(int n, complex<realfp> c[], complex<realfp> &z, realfp maxe
    nrm=norm(z);
    if(inner)
    {
-    dz=ratio(n,c,z,true);
+    dz=ratio1(n,c,z,true);
     z-=dz;
    }
    else
    {
     nrm=1/nrm;
-    dz=ratio(n,c,conj(z)*nrm,false);
+    dz=ratio1(n,c,conj(z)*nrm,false);
     z/=(1-z*dz);
    }
    const realfp err2_=norm(dz);
@@ -1796,9 +1796,6 @@ SMOIDResult<realfp> MOID_direct_search(const COrbitData<realfp>& O1, const COrbi
 
 #define instantiate_all(realfp) \
 template class COrbitData<realfp>; \
-template COrbitData<realfp>::COrbitData(const COrbitData<float>&); \
-template COrbitData<realfp>::COrbitData(const COrbitData<double>&); \
-template COrbitData<realfp>::COrbitData(const COrbitData<long double>&); \
 template class SMOIDResult<realfp>; \
 template class SLCResult<realfp>; \
 template void detect_suitable_options(realfp&, realfp&, realfp&); \
